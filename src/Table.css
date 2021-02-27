@@ -1,0 +1,10 @@
+.table{
+    margin-top:20px;
+    overflow:scroll;
+    height:400px;
+    color:#6a5d5d;
+    
+}
+.table tr:nth-of-type(2n){
+    background-color:#f3f2f8;
+}
