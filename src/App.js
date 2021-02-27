@@ -26,7 +26,7 @@ function App() {
             value:country.countryInfo.iso2
           }
         ));
-          setTableData(data);
+          setTableData(data.sort((b,a)=>a.cases-b.cases));
           setCountries(countries)
       })
       }
