@@ -1,15 +1,24 @@
-import React,{useState,useEffect,} from 'react'
-import './App.css';
-import {MenuItem,FormControl,Select,Card,CardContent,} from "@material-ui/core";
-import InfoBox from './InfoBox'
-import Map from './Map'
-import Table from './Table'
-
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import {
+  MenuItem,
+  FormControl,
+  Select,
+  Card,
+  CardContent,
+} from "@material-ui/core";
+import InfoBox from "./InfoBox";
+import LineGraph from "./LineGraph";
+import Table from "./Table";
+import { prettyPrintStat } from "./util";
+import numeral from "numeral";
+import Map from "./Map";
 function App() {
   const [countries,setCountries]= useState(['USA','UK','INDIA']);
   const [country,setCountry]=useState('worldwide')
   const [countryInfo,setCountryInfo]=useState({});
   const [tableData,setTableData]=useState([]);
+  const [casesType, setCasesType] = useState("cases");
   useEffect(()=>{
     fetch("https://disease.sh/v3/covid-19/all").then(response=>response.json())
     .then(data =>{
@@ -38,7 +47,7 @@ function App() {
     const url = countryCode === 'worldwide' ? `https://disease.sh/v3/covid-19/all`  : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
     await fetch(url).then(response=>response.json())
     .then(data=>{
-      setCountry(countryCode)
+      setCountry(countryCode);
       setCountryInfo(data);
       
     })
@@ -60,9 +69,29 @@ function App() {
     </FormControl>
     </div>
     <div className="app__stats">
-    <InfoBox title="Coronavirus Cases" total={countryInfo.cases} cases={countryInfo.todayCases}/>
-    <InfoBox title="Recovered" total={countryInfo.recovered} cases={countryInfo.todayRecovered}/>
-    <InfoBox title="Deaths" total={countryInfo.deaths} cases={countryInfo.todayDeaths}/>
+    <InfoBox
+            onClick={(e) => setCasesType("cases")}
+            title="Coronavirus Cases"
+            isRed
+            active={casesType === "cases"}
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={numeral(countryInfo.cases).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("recovered")}
+            title="Recovered"
+            active={casesType === "recovered"}
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={numeral(countryInfo.recovered).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("deaths")}
+            title="Deaths"
+            isRed
+            active={casesType === "deaths"}
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={numeral(countryInfo.deaths).format("0.0a")}
+          />
     </div>
     <Map/>
     </div>
@@ -71,6 +100,7 @@ function App() {
 <h3>Nombre de cas par pays ( live )</h3>
 <Table countries = {tableData}/>
 <h3>Nombre de cas dans le monde</h3>
+<LineGraph casesType={casesType} />
     </CardContent>
     </Card>
     </div>
