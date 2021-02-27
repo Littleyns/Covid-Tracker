@@ -82,7 +82,7 @@ const App = () => {
               value={country}
               onChange={onCountryChange}
             >
-              <MenuItem value="worldwide">Monde</MenuItem>
+              <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
                 <MenuItem value={country.value}>{country.name}</MenuItem>
               ))}
@@ -92,7 +92,7 @@ const App = () => {
         <div className="app__stats">
           <InfoBox
             onClick={(e) => setCasesType("cases")}
-            title="Cas de Covid"
+            title="Coronavirus Cases"
             isRed
             active={casesType === "cases"}
             cases={prettyPrintStat(countryInfo.todayCases)}
@@ -100,14 +100,14 @@ const App = () => {
           />
           <InfoBox
             onClick={(e) => setCasesType("recovered")}
-            title="Guéris"
+            title="Recovered"
             active={casesType === "recovered"}
             cases={prettyPrintStat(countryInfo.todayRecovered)}
             total={numeral(countryInfo.recovered).format("0.0a")}
           />
           <InfoBox
             onClick={(e) => setCasesType("deaths")}
-            title="Morts"
+            title="Deaths"
             isRed
             active={casesType === "deaths"}
             cases={prettyPrintStat(countryInfo.todayDeaths)}
@@ -124,9 +124,9 @@ const App = () => {
       <Card className="app__right">
         <CardContent>
           <div className="app__information">
-            <h3>Nombre de cas par pays</h3>
+            <h3>Live Cases by Country</h3>
             <Table countries={tableData} />
-            <h3>Nouveaux cas à travers le monde {casesType}</h3>
+            <h3>Worldwide new {casesType}</h3>
             <LineGraph casesType={casesType} />
           </div>
         </CardContent>
